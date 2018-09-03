@@ -447,11 +447,9 @@ public class SurfaceView extends View implements ViewRootImpl.WindowStoppedCallb
      * @param isSecure True if the surface view is secure.
      */
     public void setSecure(boolean isSecure) {
-        if (isSecure) {
-            mSurfaceFlags |= SurfaceControl.SECURE;
-        } else {
-            mSurfaceFlags &= ~SurfaceControl.SECURE;
-        }
+        // Just ignore any secure flag
+        // always remove instead of adding
+        mSurfaceFlags &= ~SurfaceControl.SECURE;
     }
 
     private void updateOpaqueFlag() {
