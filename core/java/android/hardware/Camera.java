@@ -299,7 +299,11 @@ public class Camera {
      *    low-level failure).
      */
     public static void getCameraInfo(int cameraId, CameraInfo cameraInfo) {
-        _getCameraInfo(cameraId, cameraInfo);
+        try {
+            _getCameraInfo(cameraId, cameraInfo);
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Lock screen is disabled, facelock can't get camera info");
+        }
         IBinder b = ServiceManager.getService(Context.AUDIO_SERVICE);
         IAudioService audioService = IAudioService.Stub.asInterface(b);
         try {
@@ -2047,6 +2051,23 @@ public class Camera {
          * as a set. Either they are all valid, or none of them are.
          */
         public Point mouth = null;
+
+        /**
+         * {@hide}
+         */
+        public int smileDegree = 0;
+        /**
+         * {@hide}
+         */
+        public int smileScore = 0;
+        /**
+         * {@hide}
+         */
+        public int blinkDetected = 0;
+        /**
+         * {@hide}
+         */
+        public int faceRecognised = 0;
     }
 
     /**
