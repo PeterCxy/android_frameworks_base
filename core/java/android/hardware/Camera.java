@@ -605,9 +605,7 @@ public class Camera {
     /**
      * An empty Camera for testing purpose.
      */
-    Camera() {
-        initAppOps();
-    }
+    Camera() {}
 
     private void initAppOps() {
         IBinder b = ServiceManager.getService(Context.APP_OPS_SERVICE);
@@ -1817,11 +1815,7 @@ public class Camera {
                     } catch (RemoteException e) {
                         Log.e(TAG, "Audio service is unavailable for queries");
                     }
-                    try {
-                        _enableShutterSound(false);
-                    } catch (Exception e) {
-                        Log.e(TAG, "Couldn't disable shutter sound");
-                    }
+                    _enableShutterSound(false);
                 } else {
                     enableShutterSound(mShutterSoundEnabledFromApp);
                 }

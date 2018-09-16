@@ -4298,9 +4298,11 @@ public final class ViewRootImpl implements ViewParent,
                     int k = 0;
                     while (k < ViewRootImpl.this.mBackupEventList.size()) {
                         try {
-                            boolean ishandled = ViewRootImpl.this.mView.dispatchPointerEvent(
-                                    (MotionEvent) ViewRootImpl.this.mBackupEventList.get(k));
-                            k++;
+                            if (mView != null) {
+                                boolean ishandled = ViewRootImpl.this.mView.dispatchPointerEvent(
+                                        (MotionEvent) ViewRootImpl.this.mBackupEventList.get(k));
+                                k++;
+                            }
                         } catch (NullPointerException e) {
                             Log.e(ViewRootImpl.TAG, "mView does not exist, discard points. " + e);
                         }
@@ -6942,6 +6944,14 @@ public final class ViewRootImpl implements ViewParent,
             mRemoved = true;
             if (mAdded) {
                 dispatchDetachedFromWindow();
+            } else {
+                Log.w(mTag, "add view failed and remove related objects");
+
+                mAccessibilityManager.removeAccessibilityStateChangeListener(
+                        mAccessibilityInteractionConnectionManager);
+                mAccessibilityManager.removeHighTextContrastStateChangeListener(
+                        mHighContrastTextManager);
+                mDisplayManager.unregisterDisplayListener(mDisplayListener);
             }
 
             if (mAdded && !mFirst) {
