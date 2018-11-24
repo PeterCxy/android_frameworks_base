@@ -4772,6 +4772,16 @@ public final class Settings {
                BOOLEAN_VALIDATOR;
 
         /**
+         * Dynamic Navigation bar tinting
+         * @hide
+         */
+        public static final String DYNAMIC_NAVIGATION_BAR_TINTING = "dynamic_navigation_bar_tinting";
+
+         /** @hide */
+        private static final Validator DYNAMIC_NAVIGATION_BAR_TINTING_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4899,6 +4909,7 @@ public final class Settings {
             SMART_PIXELS_ON_POWER_SAVE,
             ACCELEROMETER_ROTATION_ANGLES,
             WEATHER_LOCKSCREEN_UNIT,
+            DYNAMIC_NAVIGATION_BAR_TINTING,
         };
 
         /**
@@ -5082,6 +5093,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SMART_PIXELS_ON_POWER_SAVE);
             PRIVATE_SETTINGS.add(ACCELEROMETER_ROTATION_ANGLES);
             PRIVATE_SETTINGS.add(WEATHER_LOCKSCREEN_UNIT);
+            PRIVATE_SETTINGS.add(DYNAMIC_NAVIGATION_BAR_TINTING);
         }
 
         /**
@@ -5241,6 +5253,7 @@ public final class Settings {
             VALIDATORS.put(SMART_PIXELS_ON_POWER_SAVE, SMART_PIXELS_ON_POWER_SAVE_VALIDATOR);
             VALIDATORS.put(ACCELEROMETER_ROTATION_ANGLES, ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
             VALIDATORS.put(WEATHER_LOCKSCREEN_UNIT, WEATHER_LOCKSCREEN_UNIT_VALIDATOR);
+            VALIDATORS.put(DYNAMIC_NAVIGATION_BAR_TINTING, DYNAMIC_NAVIGATION_BAR_TINTING_VALIDATOR);
         }
 
         /**

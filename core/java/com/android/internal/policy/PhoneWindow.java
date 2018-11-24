@@ -2436,7 +2436,14 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             mStatusBarColor = a.getColor(R.styleable.Window_statusBarColor, 0xFF000000);
         }
         if (!mForcedNavigationBarColor) {
+            boolean isDynamic = Settings.System.getInt(getContext().getContentResolver(),
+                            Settings.System.DYNAMIC_NAVIGATION_BAR_TINTING, 0) == 1;
+
             mNavigationBarColor = a.getColor(R.styleable.Window_navigationBarColor, 0xFF000000);
+            if (isDynamic && (mNavigationBarColor == 0xFF000000 || mNavigationBarColor == 0x00000000)) {
+                // Use the status bar color as navigation bar color
+                mNavigationBarColor = mStatusBarColor;
+            }
             mNavigationBarDividerColor = a.getColor(R.styleable.Window_navigationBarDividerColor,
                     0x00000000);
         }
