@@ -4771,15 +4771,6 @@ public final class Settings {
                BOOLEAN_VALIDATOR;
 
         /**
-         * Dynamic Navigation bar tinting
-         * @hide
-         */
-        public static final String DYNAMIC_NAVIGATION_BAR_TINTING = "dynamic_navigation_bar_tinting";
-
-         /** @hide */
-        private static final Validator DYNAMIC_NAVIGATION_BAR_TINTING_VALIDATOR =
-                BOOLEAN_VALIDATOR;
-        /**
         * @hide
          * Whether to set a lower brightness level when enabling night mode
          * 0: Disabled
@@ -4921,7 +4912,6 @@ public final class Settings {
             SMART_PIXELS_ON_POWER_SAVE,
             ACCELEROMETER_ROTATION_ANGLES,
             WEATHER_LOCKSCREEN_UNIT,
-            DYNAMIC_NAVIGATION_BAR_TINTING,
             NIGHT_BRIGHTNESS_VALUE,
         };
 
@@ -5106,7 +5096,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SMART_PIXELS_ON_POWER_SAVE);
             PRIVATE_SETTINGS.add(ACCELEROMETER_ROTATION_ANGLES);
             PRIVATE_SETTINGS.add(WEATHER_LOCKSCREEN_UNIT);
-            PRIVATE_SETTINGS.add(DYNAMIC_NAVIGATION_BAR_TINTING);
             PRIVATE_SETTINGS.add(NIGHT_BRIGHTNESS_VALUE);
         }
 
@@ -5267,7 +5256,6 @@ public final class Settings {
             VALIDATORS.put(SMART_PIXELS_ON_POWER_SAVE, SMART_PIXELS_ON_POWER_SAVE_VALIDATOR);
             VALIDATORS.put(ACCELEROMETER_ROTATION_ANGLES, ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
             VALIDATORS.put(WEATHER_LOCKSCREEN_UNIT, WEATHER_LOCKSCREEN_UNIT_VALIDATOR);
-            VALIDATORS.put(DYNAMIC_NAVIGATION_BAR_TINTING, DYNAMIC_NAVIGATION_BAR_TINTING_VALIDATOR);
             VALIDATORS.put(NIGHT_BRIGHTNESS_VALUE, NIGHT_BRIGHTNESS_VALUE_VALIDATOR);
         }
 
