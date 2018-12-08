@@ -3535,6 +3535,14 @@ public final class Settings {
          */
         public static final String RINGTONE = "ringtone";
 
+        /**
+         * Persistent store for the system-wide default ringtone for Slot2 URI.
+         *
+         * @see #RINGTONE
+         * @see #DEFAULT_RINGTONE2_URI
+         */
+        public static final String RINGTONE2 = "ringtone2";
+
         private static final Validator RINGTONE_VALIDATOR = URI_VALIDATOR;
 
         /**
@@ -3547,10 +3555,23 @@ public final class Settings {
          */
         public static final Uri DEFAULT_RINGTONE_URI = getUriFor(RINGTONE);
 
+        /**
+         * A {@link Uri} that will point to the current default ringtone for Slot2
+         * at any given time.
+         *
+         * @see #DEFAULT_RINGTONE_URI
+         */
+        public static final Uri DEFAULT_RINGTONE2_URI = getUriFor(RINGTONE2);
+
         /** {@hide} */
         public static final String RINGTONE_CACHE = "ringtone_cache";
         /** {@hide} */
         public static final Uri RINGTONE_CACHE_URI = getUriFor(RINGTONE_CACHE);
+
+        /** {@hide} */
+        public static final String RINGTONE2_CACHE = "ringtone2_cache";
+        /** {@hide} */
+        public static final Uri RINGTONE2_CACHE_URI = getUriFor(RINGTONE2_CACHE);
 
         /**
          * Persistent store for the system-wide default notification sound.
@@ -4785,6 +4806,33 @@ public final class Settings {
                 ANY_INTEGER_VALIDATOR;
 
         /**
+         * Whether the phone ringtone should be played in an increasing manner
+         * @hide
+         */
+        public static final String INCREASING_RING = "increasing_ring";
+         /** @hide */
+        public static final Validator INCREASING_RING_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
+        /**
+         * Start volume fraction for increasing ring volume
+         * @hide
+         */
+        public static final String INCREASING_RING_START_VOLUME = "increasing_ring_start_vol";
+         /** @hide */
+        public static final Validator INCREASING_RING_START_VOLUME_VALIDATOR =
+                ANY_STRING_VALIDATOR;
+
+        /**
+         * Ramp up time (seconds) for increasing ring
+         * @hide
+         */
+        public static final String INCREASING_RING_RAMP_UP_TIME = "increasing_ring_ramp_up_time";
+         /** @hide */
+        public static final Validator INCREASING_RING_RAMP_UP_TIME_VALIDATOR =
+                ANY_STRING_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4836,6 +4884,7 @@ public final class Settings {
             POINTER_SPEED,
             VIBRATE_WHEN_RINGING,
             RINGTONE,
+            RINGTONE2,
             LOCK_TO_APP_ENABLED,
             NOTIFICATION_SOUND,
             ACCELEROMETER_ROTATION,
@@ -4913,6 +4962,9 @@ public final class Settings {
             ACCELEROMETER_ROTATION_ANGLES,
             WEATHER_LOCKSCREEN_UNIT,
             NIGHT_BRIGHTNESS_VALUE,
+            INCREASING_RING,
+            INCREASING_RING_START_VOLUME,
+            INCREASING_RING_RAMP_UP_TIME
         };
 
         /**
@@ -4961,6 +5013,7 @@ public final class Settings {
             PUBLIC_SETTINGS.add(VOLUME_NOTIFICATION);
             PUBLIC_SETTINGS.add(VOLUME_BLUETOOTH_SCO);
             PUBLIC_SETTINGS.add(RINGTONE);
+            PUBLIC_SETTINGS.add(RINGTONE2);
             PUBLIC_SETTINGS.add(NOTIFICATION_SOUND);
             PUBLIC_SETTINGS.add(ALARM_ALERT);
             PUBLIC_SETTINGS.add(TEXT_AUTO_REPLACE);
@@ -5097,6 +5150,9 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ACCELEROMETER_ROTATION_ANGLES);
             PRIVATE_SETTINGS.add(WEATHER_LOCKSCREEN_UNIT);
             PRIVATE_SETTINGS.add(NIGHT_BRIGHTNESS_VALUE);
+            PRIVATE_SETTINGS.add(INCREASING_RING);
+            PRIVATE_SETTINGS.add(INCREASING_RING_START_VOLUME);
+            PRIVATE_SETTINGS.add(INCREASING_RING_RAMP_UP_TIME);
         }
 
         /**
@@ -5128,6 +5184,7 @@ public final class Settings {
             VALIDATORS.put(NOTIFICATION_VIBRATION_INTENSITY, VIBRATION_INTENSITY_VALIDATOR);
             VALIDATORS.put(HAPTIC_FEEDBACK_INTENSITY, VIBRATION_INTENSITY_VALIDATOR);
             VALIDATORS.put(RINGTONE, RINGTONE_VALIDATOR);
+            VALIDATORS.put(RINGTONE2, RINGTONE_VALIDATOR);
             VALIDATORS.put(NOTIFICATION_SOUND, NOTIFICATION_SOUND_VALIDATOR);
             VALIDATORS.put(ALARM_ALERT, ALARM_ALERT_VALIDATOR);
             VALIDATORS.put(TEXT_AUTO_REPLACE, TEXT_AUTO_REPLACE_VALIDATOR);
@@ -5257,6 +5314,9 @@ public final class Settings {
             VALIDATORS.put(ACCELEROMETER_ROTATION_ANGLES, ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
             VALIDATORS.put(WEATHER_LOCKSCREEN_UNIT, WEATHER_LOCKSCREEN_UNIT_VALIDATOR);
             VALIDATORS.put(NIGHT_BRIGHTNESS_VALUE, NIGHT_BRIGHTNESS_VALUE_VALIDATOR);
+            VALIDATORS.put(INCREASING_RING, INCREASING_RING_VALIDATOR);
+            VALIDATORS.put(INCREASING_RING_START_VOLUME, INCREASING_RING_START_VOLUME_VALIDATOR);
+            VALIDATORS.put(INCREASING_RING_RAMP_UP_TIME, INCREASING_RING_RAMP_UP_TIME_VALIDATOR);
         }
 
         /**
@@ -5288,6 +5348,7 @@ public final class Settings {
         public static final Map<String, String> CLONE_FROM_PARENT_ON_VALUE = new ArrayMap<>();
         static {
             CLONE_FROM_PARENT_ON_VALUE.put(RINGTONE, Secure.SYNC_PARENT_SOUNDS);
+            CLONE_FROM_PARENT_ON_VALUE.put(RINGTONE2, Secure.SYNC_PARENT_SOUNDS);
             CLONE_FROM_PARENT_ON_VALUE.put(NOTIFICATION_SOUND, Secure.SYNC_PARENT_SOUNDS);
             CLONE_FROM_PARENT_ON_VALUE.put(ALARM_ALERT, Secure.SYNC_PARENT_SOUNDS);
         }
@@ -9292,6 +9353,22 @@ public final class Settings {
                 BOOLEAN_VALIDATOR;
 
         /**
+         * Force authorize Substratum (or equivalent) frontend calling packages by ThemeInterfacer
+         * The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String FORCE_AUTHORIZE_SUBSTRATUM_PACKAGES = "force_authorize_substratum_packages";
+
+        /**
+         * Boolean value whether to link ringtone and notification volume
+         * @hide
+         */
+        public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
+        /** @hide */
+        private static final Validator VOLUME_LINK_NOTIFICATION_VALIDATOR =
+                BOOLEAN_VALIDATOR;
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
@@ -9443,6 +9520,7 @@ public final class Settings {
             SMARTBAR_DOUBLETAP_SLEEP,
             ADB_NOTIFY,
             QUICK_SETTINGS_TILES_VIBRATE,
+            VOLUME_LINK_NOTIFICATION,
         };
 
         /**
@@ -9647,6 +9725,7 @@ public final class Settings {
             VALIDATORS.put(SMARTBAR_DOUBLETAP_SLEEP, SMARTBAR_DOUBLETAP_SLEEP_VALIDATOR);
             VALIDATORS.put(ADB_NOTIFY, ADB_NOTIFY_VALIDATOR);
             VALIDATORS.put(QUICK_SETTINGS_TILES_VIBRATE, QUICK_SETTINGS_TILES_VIBRATE_VALIDATOR);
+            VALIDATORS.put(VOLUME_LINK_NOTIFICATION, VOLUME_LINK_NOTIFICATION_VALIDATOR);
         }
 
         /**

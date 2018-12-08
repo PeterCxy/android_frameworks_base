@@ -400,6 +400,7 @@
 
     <protected-broadcast android:name="android.telecom.action.DEFAULT_DIALER_CHANGED" />
     <protected-broadcast android:name="android.provider.action.DEFAULT_SMS_PACKAGE_CHANGED" />
+    <protected-broadcast android:name="android.provider.action.SMS_MMS_DB_CREATED" />
     <protected-broadcast android:name="android.intent.action.CONTENT_CHANGED" />
     <protected-broadcast android:name="android.provider.Telephony.MMS_DOWNLOADED" />
 
@@ -603,6 +604,9 @@
     <!-- For IdleController -->
     <protected-broadcast android:name="android.intent.action.DOCK_IDLE" />
     <protected-broadcast android:name="android.intent.action.DOCK_ACTIVE" />
+    <protected-broadcast android:name="projekt.substratum.APP_CRASHED" />
+    <protected-broadcast android:name="com.android.systemui.action.RESTART_THEME" />
+    <protected-broadcast android:name="com.android.systemui.action.REFRESH_SOUND" />
 
     <!-- Used for long press power torch feature - automatic turn off on timeout -->
     <protected-broadcast android:name="com.android.server.policy.PhoneWindowManager.ACTION_TORCH_OFF" />

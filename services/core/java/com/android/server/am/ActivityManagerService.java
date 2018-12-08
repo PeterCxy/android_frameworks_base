@@ -283,6 +283,8 @@ import android.content.IIntentReceiver;
 import android.content.IIntentSender;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.om.IOverlayManager;
+import android.content.om.OverlayInfo;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ApplicationInfo.HiddenApiEnforcementPolicy;
@@ -5899,6 +5901,7 @@ public class ActivityManagerService extends IActivityManager.Stub
     private final void handleAppDiedLocked(ProcessRecord app,
             boolean restarting, boolean allowRestart) {
         int pid = app.pid;
+        final boolean clearLaunchStartTime = !restarting && app.removed && app.foregroundActivities;
         boolean kept = cleanUpApplicationRecordLocked(app, restarting, allowRestart, -1,
                 false /*replacingPid*/);
         if (!kept && !restarting) {
@@ -5938,6 +5941,19 @@ public class ActivityManagerService extends IActivityManager.Stub
             }
         } finally {
             mWindowManager.continueSurfaceLayout();
+        }
+
+        // Hack for pi
+        // When an app process is removed, activities from the process may be relaunched. In the
+        // case of forceStopPackageLocked the activities are finished before any window is drawn,
+        // and the launch time is not cleared. This will be incorrectly used to calculate launch
+        // time for the next launched activity launched in the same windowing mode.
+        if (clearLaunchStartTime) {
+            final LaunchTimeTracker.Entry entry = mStackSupervisor
+                    .getLaunchTimeTracker().getEntry(mStackSupervisor.getWindowingMode());
+            if (entry != null) {
+                entry.mLaunchStartTime = 0;
+            }
         }
     }
 
@@ -14706,6 +14722,34 @@ public class ActivityManagerService extends IActivityManager.Stub
         ((WindowManager)mContext.getSystemService(
                 Context.WINDOW_SERVICE)).addView(v, lp);
     }
+
+    public final void disableOverlays() {
+        try {
+            IOverlayManager iom = IOverlayManager.Stub.asInterface(
+                    ServiceManager.getService("overlay"));
+            if (iom == null) {
+                return;
+            }
+            Log.d(TAG, "Contacting the Overlay Manager Service for the list of enabled overlays");
+            Map<String, List<OverlayInfo>> allOverlays = iom.getAllOverlays(UserHandle.USER_SYSTEM);
+            if (allOverlays != null) {
+                Log.d(TAG, "The Overlay Manager Service provided the list of enabled overlays");
+                Set<String> set = allOverlays.keySet();
+                for (String targetPackageName : set) {
+                    for (OverlayInfo oi : allOverlays.get(targetPackageName)) {
+                        if (oi.isEnabled()) {
+                            iom.setEnabled(oi.packageName, false, UserHandle.USER_SYSTEM);
+                            Log.d(TAG, "Now disabling \'" + oi.packageName + "\'");
+                        }
+                    }
+                }
+            }
+        } catch (RemoteException re) {
+            re.printStackTrace();
+            Log.d(TAG, "RemoteException while trying to contact the Overlay Manager Service!");
+        }
+    }
+
 
     @Override
     public void noteWakeupAlarm(IIntentSender sender, WorkSource workSource, int sourceUid,
