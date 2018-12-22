@@ -69,6 +69,9 @@ public class NetworkTraffic extends TextView implements StatusIconDisplayable {
     private int mVisibleState = -1;
     private boolean mTrafficVisible = false;
     private boolean mSystemIconVisible = true;
+    private boolean mColorIsStatic = false;
+
+    private boolean mScreenOn = true;
 
     private Handler mTrafficHandler = new Handler() {
         @Override
@@ -211,6 +214,8 @@ public class NetworkTraffic extends TextView implements StatusIconDisplayable {
             mAttached = true;
             IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_ON);
             mContext.registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);
@@ -231,8 +236,16 @@ public class NetworkTraffic extends TextView implements StatusIconDisplayable {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action != null && action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+            if (action == null) return;
+
+            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) && mScreenOn) {
                 updateSettings();
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOn = true;
+                updateSettings();
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOn = false;
+                clearHandlerCallbacks();
             }
         }
     };
@@ -304,6 +317,9 @@ public class NetworkTraffic extends TextView implements StatusIconDisplayable {
 
     @Override
     public void onDarkChanged(Rect area, float darkIntensity, int tint) {
+        if (mColorIsStatic) {
+            return;
+        }
         mTintColor = DarkIconDispatcher.getTint(area, this, tint);
         setTextColor(mTintColor);
         updateTrafficDrawable();
@@ -354,6 +370,7 @@ public class NetworkTraffic extends TextView implements StatusIconDisplayable {
 
     @Override
     public void setStaticDrawableColor(int color) {
+        mColorIsStatic = true;
         mTintColor = color;
         setTextColor(mTintColor);
         updateTrafficDrawable();

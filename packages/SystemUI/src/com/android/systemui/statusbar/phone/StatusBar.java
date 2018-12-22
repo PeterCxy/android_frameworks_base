@@ -1246,6 +1246,11 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     @Override
     public void onOverlayChanged() {
+        updateNotificationViews();
+        mStackScroller.onOverlayChanged();
+        mNotificationShelf.onOverlayChanged();
+        Dependency.get(DarkIconDispatcher.class).onOverlayChanged(mContext);
+        mEntryManager.onOverlayChanged();
         if (mBrightnessMirrorController != null) {
             mBrightnessMirrorController.onOverlayChanged();
         }

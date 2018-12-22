@@ -63,8 +63,9 @@
 
   <java-symbol type="array" name="config_vendorPlatformSignatures" />
 
-  <java-symbol type="dimen" name="nav_gesture_swipe_min_length" />
-  <java-symbol type="dimen" name="nav_gesture_long_press_max_length" />
+  <java-symbol type="integer" name="nav_gesture_swipe_min_length" />
+  <java-symbol type="integer" name="nav_gesture_swipe_timout" />
+  <java-symbol type="integer" name="nav_gesture_move_threshold" />
 
   <!-- display for radio tech -->
   <java-symbol type="bool" name="config_display_rat" />
@@ -102,6 +103,8 @@
   <!-- True if the notification's dynamic app icon and text tint should be optimised for dark
        backgrounds -->
   <java-symbol type="bool" name="config_useDarkBgNotificationIconTextTinting" />
+  <java-symbol type="bool" name="config_useDarkBgNotificationTinting_override" />
+  <java-symbol type="bool" name="config_notificationTinting_override" />
 
   <!-- Notification icon tint -->
   <java-symbol type="color" name="notification_icon_default_color" />
@@ -116,4 +119,11 @@
   <java-symbol type="color" name="fastscroller_text_color" />
 
   <java-symbol type="bool" name="config_oldQtiTelephony" />
+
+  <!-- Notification app name tint -->
+  <java-symbol type="bool" name="config_allowNotificationAppNameTextTinting" />
+
+  <!-- Auto fill -->
+  <java-symbol type="color" name="autofill_save_title_color" />
+  <java-symbol type="color" name="autofill_autofill_save_custom_subtitle_color" />
 </resources>
